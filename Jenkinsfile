@@ -12,7 +12,6 @@ pipeline {
                 sh 'ansible-playbook -i hosts/inven playbook.yaml'	  
             }  
         }
-
         stage('Check Service Status') {
             steps {
                 script {
