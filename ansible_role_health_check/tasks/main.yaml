@@ -1,0 +1,15 @@
+---
+- name: Check if services are running
+  block:
+    - name: Check service status
+      shell: ps aux | grep "mysql"
+      register: service_status
+      loop: "{{ services_to_check }}"
+      
+    - name: Start services if not running
+      command: /home/knoldus/my.sh
+      when: service_status.results.rc != 0
+      loop: "{{ services_to_check }}"
+      loop_control:
+        loop_var: item
+

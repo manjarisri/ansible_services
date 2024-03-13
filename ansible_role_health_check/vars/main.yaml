@@ -1,0 +1,5 @@
+services_to_check:
+      - name: "mysql"
+        path: "/home/knoldus/my.sh"
+      - name: "grafana"
+        path: "/home/knoldus/gr.sh"

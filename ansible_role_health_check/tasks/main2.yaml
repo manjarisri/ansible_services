@@ -1,0 +1,20 @@
+---
+- name: Check and restart services
+  block:
+    - name: Check service status for edge-core
+      shell: ps aux | grep edge-core | grep -v grep
+      register: edge_core_status
+      ignore_errors: true
+    
+    - name: Start edge-core if not running
+      command: "/app/edge/edge-core/bin/startup.sh"
+      when: edge_core_status.rc != 0
+
+    - name: Check service status for edge-session
+      shell: ps aux | grep edge-session | grep -v grep
+      register: edge_session_status
+      ignore_errors: true
+
+    - name: Start edge-session if not running
+      command: "/app/edge/edge-session/bin/startup.sh"
+      when: edge_session_status.rc != 0
