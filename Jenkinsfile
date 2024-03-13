@@ -9,7 +9,7 @@ pipeline {
 	    
         stage('ansible script') {
             steps {
-                sh 'ansible-playbook -i hosts/inven playbook.yaml'	  
+                sh 'ansible-playbook -i ansible_role_health_check/hosts/inven playbook.yaml'	  
             }  
         }
         stage('Check Service Status') {
