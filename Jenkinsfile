@@ -15,6 +15,16 @@ pipeline {
         stage('Check Service Status') {
             steps {
                 script {
+                    // Create the cache directory if it doesn't exist
+                    sh """
+                    if [ ! -d 'cache' ]; then
+                        mkdir 'cache'
+                        echo 'Directory cache created successfully.'
+                    else
+                        echo 'Directory cache already exists. Skipping creation.'
+                    fi
+                    """
+                    
                     def mysql_status = sh script: 'ps aux | grep mysql | grep -v grep', returnStatus: true
 
                     def message = ''
