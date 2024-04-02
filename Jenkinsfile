@@ -3,19 +3,21 @@ pipeline {
     stages {
         stage('gitcheckout') {
             steps {                
-                // Intentionally fail the job by executing a command that does not exist
-                sh 'nonexistent-command'  
+                git branch: 'main', url: 'https://github.com/manjarisri/ansible_services.git'  
             }  
         }
 	    
         stage('ansible script') {
             steps {
-                sh 'ansible-playbook -i ansible_role_health_check/hosts/inven ansible_role_health_check/playbook.yaml'	  
-            }
+                script {
+                    // Intentionally fail the ansible script stage
+                    error('Intentional failure in ansible script stage')
+                }
+            }  
             post {
                 failure {
-                    // Trigger the second job if the ansible script fails
-                    build job: '../test'
+                    // Trigger the second job if the ansible script stage fails
+                    build job: 'test'
                 }
             }
         }
@@ -23,9 +25,32 @@ pipeline {
         stage('Check Service Status') {
             steps {
                 script {
-                    // Intentionally fail the job by exiting with a non-zero status code
-                    // This will cause the pipeline to fail
-                    error('Intentional failure')
+                    // Create the cache directory if it doesn't exist
+                    sh """
+                     if [ ! -d 'cache' ]; then mkdir 'cache'; fi
+                    """
+
+                    
+                    def mysql_status = sh script: 'ps aux | grep mysql | grep -v grep', returnStatus: true
+
+                    def message = ''
+
+                    if (mysql_status == 0) {
+                        message = 'MySQL service is running successfully.'
+                    } else {
+                        message = 'MySQL service is not running.'
+                    }
+
+                    // Send message to Cisco Spark space
+                    sparkSend(
+                        credentialsId: 'spark', 
+                        message: message, 
+                        messageType: 'text', 
+                        spaceList: [[
+                            spaceId: 'Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vZTAzMDVkYjAtZTA0Ny0xMWVlLWJhNmYtMjEzZTJjZjgyZTIx', 
+                            spaceName: 'jenkins'
+                        ]]
+                    )
                 }
             }
         }
