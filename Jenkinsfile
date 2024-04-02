@@ -10,8 +10,7 @@ pipeline {
         stage('ansible script') {
             steps {
                 sh 'ansible-playbook -i ansible_role_health_check/hosts/inven ansible_role_health_check/playbook.yaml'	  
-            }  
-        }
+            }
             post {
                 failure {
                     // Trigger the second job if the ansible script fails
@@ -19,6 +18,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Check Service Status') {
             steps {
                 script {
@@ -27,7 +27,7 @@ pipeline {
                      if [ ! -d 'cache' ]; then mkdir 'cache'; fi
                     """
                     
-                    def mysql_status = sh script: 'ps aux  ', returnStatus: true
+                    def mysql_status = sh script: 'ps aux', returnStatus: true
 
                     def message = ''
 
@@ -51,3 +51,4 @@ pipeline {
             }
         }
     }
+}
