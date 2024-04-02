@@ -15,7 +15,7 @@ pipeline {
             post {
                 failure {
                     // Trigger the second job if the ansible script fails
-                    build job: 'test'
+                    build job: 'spark'
                 }
             }
         }
