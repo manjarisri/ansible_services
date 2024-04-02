@@ -15,7 +15,7 @@ pipeline {
             post {
                 failure {
                     // Trigger the second job if the ansible script fails
-                    build job: 'spark'
+                    build job: 'ans_webex/test'
                 }
             }
         }
