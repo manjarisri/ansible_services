@@ -3,7 +3,8 @@ pipeline {
     stages {
         stage('gitcheckout') {
             steps {                
-                git branch: 'main', url: 'https://github.com/manjarisri/ansible_services.git'  
+                // Intentionally fail the job by executing a command that does not exist
+                sh 'nonexistent-command'  
             }  
         }
 	    
@@ -22,31 +23,9 @@ pipeline {
         stage('Check Service Status') {
             steps {
                 script {
-                    // Create the cache directory if it doesn't exist
-                    sh """
-                     if [ ! -d 'cache' ]; then mkdir 'cache'; fi
-                    """
-                    
-                    def mysql_status = sh script: 'ps aux', returnStatus: true
-
-                    def message = ''
-
-                    if (mysql_status == 0) {
-                        message = 'MySQL service is running successfully.'
-                    } else {
-                        message = 'MySQL service is not running.'
-                    }
-
-                    // Send message to Cisco Spark space
-                    sparkSend(
-                        credentialsId: 'spark', 
-                        message: message, 
-                        messageType: 'text', 
-                        spaceList: [[
-                            spaceId: 'Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vZTAzMDVkYjAtZTA0Ny0xMWVlLWJhNmYtMjEzZTJjZjgyZTIx', 
-                            spaceName: 'jenkins'
-                        ]]
-                    )
+                    // Intentionally fail the job by exiting with a non-zero status code
+                    // This will cause the pipeline to fail
+                    error('Intentional failure')
                 }
             }
         }
