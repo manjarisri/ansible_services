@@ -9,16 +9,9 @@ pipeline {
 	    
         stage('ansible script') {
             steps {
-                script {
-                    try {
-                        sh 'ansible-playbook -i ansible_role_health_check/hosts/inven ansible_role_health_check/playbook.yaml'	  
-                    } catch (Exception e) {
-                        // If ansible script fails, trigger the second job
-                        build job: 'test'
-                        throw e // Re-throw the exception to mark the stage as failed
-                    }
-                }
-            }
+                sh 'ansible-playbook -i ansible_role_health_check/hosts/inven ansible_role_health_check/playbook.yaml'	  
+            }  
+        }
             post {
                 failure {
                     // Trigger the second job if the ansible script fails
