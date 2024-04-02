@@ -8,5 +8,5 @@
     
     - name: Start mysql if not running
       command: "nohup /home/knoldus/my.sh"
-      when: mysql_status.rc != 0
+      when: mysql_status.rc = 0
 
