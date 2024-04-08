@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    triggers {
+        cron('27 15 * * *') // Schedule the pipeline to run at 6 AM SGT every day
+    }
     stages {
         stage('gitcheckout') {
             steps {                
