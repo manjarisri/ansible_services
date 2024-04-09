@@ -1,7 +1,7 @@
 pipeline {
     agent any
     triggers {
-        cron('15 7-17 * * 1-5') 
+        cron('20 14 * * 1-5') 
     }
     stages {
         stage('gitcheckout') {
