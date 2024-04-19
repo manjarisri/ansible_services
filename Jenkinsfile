@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Intentionally fail the ansible script stage
-                    // error('Intentional failure in ansible script stage')
+                    echo ('Intentional failure in ansible script stage')
                 }
             }  
             post {
