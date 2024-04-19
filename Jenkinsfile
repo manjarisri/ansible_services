@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('gitcheckout') {
             steps {                
-                git branch: 'main', url: 'https://github.com/manjarisri/ansible_services.git'  
+                 url: 'https://github.com/manjarisri/ansible_services.git'  
             }  
         }
 	    
@@ -29,6 +29,8 @@ pipeline {
             steps {
                 script {
                     // Create the cache directory if it doesn't exist
+		    def branch = env.BRANCH_NAME
+		    echo 'branch'
                     sh """
                      if [ ! -d 'cache' ]; then mkdir 'cache'; fi
                     """
