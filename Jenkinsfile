@@ -31,7 +31,8 @@ pipeline {
                 script {
                     // Create the cache directory if it doesn't exist
 		    def branch = env.BRANCH_NAME
-		    echo branch
+                    echo "Branch name: ${branch}"
+			
                     sh """
                      if [ ! -d 'cache' ]; then mkdir 'cache'; fi
                     """
