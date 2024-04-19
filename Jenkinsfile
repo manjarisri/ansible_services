@@ -4,17 +4,18 @@ pipeline {
     //     cron('*/2 * * * *') 
     // }
     stages {
-        stage('gitcheckout') {
-            steps {                
-                 url: 'https://github.com/manjarisri/ansible_services.git'  
-            }  
-        }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+         }  
+       
 	    
         stage('ansible script') {
             steps {
                 script {
                     // Intentionally fail the ansible script stage
-                    error('Intentional failure in ansible script stage')
+                    // error('Intentional failure in ansible script stage')
                 }
             }  
             post {
