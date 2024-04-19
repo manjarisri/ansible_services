@@ -6,6 +6,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+		def branch = env.BRANCH_NAME
+                echo "Branch name: ${branch}"
                 checkout scm
             }
          }  
@@ -29,9 +31,6 @@ pipeline {
         stage('Check Service Status') {
             steps {
                 script {
-			
-		    def branch = env.BRANCH_NAME
-                    echo "Branch name: ${branch}"
 			
                     sh """
                      if [ ! -d 'cache' ]; then mkdir 'cache'; fi
