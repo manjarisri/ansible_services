@@ -41,8 +41,7 @@ pipeline {
 
                     // def message = ''
 	            def message = "Services are running: ${env.env_name}"
-                    def styledMessage = message.toString().replaceFirst("(?s)(^.*$)", "<b><font size='3'>$1</font></b>")
-                    echo "styledMessage"
+                    echo "\u001b[1m\u001b[34m${message}\u001b[0m"    
 
                     // if (mysql_status == 0) {
                     //     message = styledMessage
