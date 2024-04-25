@@ -40,8 +40,7 @@ pipeline {
                     def mysql_status = sh script: 'ps aux | grep mysql | grep -v grep', returnStatus: true
 
                     // def message = ''
-                    def message = "<strong>Services are running:</strong> ${env.env_name}"
-
+                    def message = "# Services are running"
                     
 
                     // Send message to Cisco Spark space
