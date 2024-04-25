@@ -39,13 +39,16 @@ pipeline {
                     
                     def mysql_status = sh script: 'ps aux | grep mysql | grep -v grep', returnStatus: true
 
-                    def message = ''
+                    // def message = ''
+	            def message = "Services are running: ${env.env_name}"
+                    def styledMessage = message.toString().replaceFirst("(?s)(^.*$)", "<b><font size='3'>$1</font></b>")
+                    echo "styledMessage"
 
-                    if (mysql_status == 0) {
-                        message = 'MySQL service is running successfully.'
-                    } else {
-                        message = 'MySQL service is not running.'
-                    }
+                    // if (mysql_status == 0) {
+                    //     message = styledMessage
+                    // } else {
+                    //     message = 'MySQL service is not running.'
+                    // }
 
                     // Send message to Cisco Spark space
                     sparkSend(
