@@ -40,8 +40,7 @@ pipeline {
                     def mysql_status = sh script: 'ps aux | grep mysql | grep -v grep', returnStatus: true
 
                     // def message = ''
-	            def message = "Services are running: ${env.env_name}"
-                    echo "\u001b[1m\u001b[34m${message}\u001b[0m"    
+                    def message = "**Services are running:**" // Use markdown formatting for bold text
 
                     // if (mysql_status == 0) {
                     //     message = styledMessage
