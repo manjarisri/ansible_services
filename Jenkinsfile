@@ -40,18 +40,18 @@ pipeline {
                     def mysql_status = sh script: 'ps aux | grep mysql | grep -v grep', returnStatus: true
 
                     // def message = ''
-                     def message = 'This is a **bold** message.'
-                    
+                     def message = '**This is a bold message.**'
 
-                    // Send message to Cisco Spark space
-                    sparkSend(
-                        credentialsId: 'spark', 
-                        message: message, 
-                        messageType: 'text', 
-                        spaceList: [[
-                            spaceId: 'Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vZTAzMDVkYjAtZTA0Ny0xMWVlLWJhNmYtMjEzZTJjZjgyZTIx', 
-                            spaceName: 'jenkins'
-                        ]]
+		     sparkSend(
+			    credentialsId: 'spark', 
+			    message: message, 
+			    messageType: 'markdown', // Specify the message type as 'markdown'
+			    spaceList: [[
+			        spaceId: 'Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vZTAzMDVkYjAtZTA0Ny0xMWVlLWJhNmYtMjEzZTJjZjgyZTIx', 
+			        spaceName: 'jenkins'
+			    ]]
+			)
+
                     )
                 }
             }
