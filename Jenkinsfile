@@ -51,10 +51,9 @@ pipeline {
 			        spaceName: 'jenkins'
 			    ]]
 			)
-
                     )
                 }
             }
         }
     }
-}
+
