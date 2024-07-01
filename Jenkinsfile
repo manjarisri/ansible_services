@@ -12,20 +12,11 @@ pipeline {
                     sh """
                       echo "Checking workspace contents:"
                       ls -l
-                      echo "Checking ansible_role_health_check directory contents:"
-                      ls -l ansible_role_health_check
                     """
-                    stage('Health Check') {
-                        dir("${env.WORKSPACE}/ansible_role_health_check") {
-                            ansiblePlaybook(
-                                installation: "ansible",
-                                playbook: "./playbook.yaml",
-                                inventory: "./hosts/inven",
-                                extras: "-vvv",
-                                disableHostKeyChecking: true
-                            )
-                        }
-                    }
+                    stage('ansible script') {
+                      steps{
+            	    	sh 'ansible-playbook svc.yaml -i inven.ini'	  
+                      } 
                 }
             }
             post {
