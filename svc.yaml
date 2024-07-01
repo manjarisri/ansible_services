@@ -25,6 +25,7 @@
       block:
         - name: Stop mysql
           ansible.builtin.shell: "nohup /home/knoldus/my_stop.sh"
+          ignore_errors: true
         - name: Start mysql
           ansible.builtin.shell: "nohup /home/knoldus/my.sh"
       when: manual_trigger
