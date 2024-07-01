@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    parameters {
+        booleanParam(name: 'MANUAL_TRIGGER', defaultValue: false, description: 'Is this a manual trigger?')
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -7,13 +10,12 @@ pipeline {
             }
         }
         stage('Ansible Health Check') {
-            steps {
-                echo "Checking workspace contents:"
-                sh "ls -l"
-
-                // Execute Ansible playbook
-                sh 'ansible-playbook svc.yaml -i inven.ini'
-            }
+            script {
+                    def manualTrigger = params.MANUAL_TRIGGER ? 'true' : 'false'
+                    sh """
+                        ansible-playbook -i inven.ini svc.yaml -e "manual_trigger=${manualTrigger}"
+                    """
+                }
         }
     }
 }
