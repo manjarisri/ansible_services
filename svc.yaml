@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   vars:
-    manual_trigger: "{{ manual_trigger | default(false) }}"
+    manual_trigger: "{{ params.manual_trigger | default(false) }}"
   tasks:
     - name: Check if MySQL is running
       ansible.builtin.shell: "ps aux | grep mysql | grep -v grep"
