@@ -26,8 +26,3 @@
               - grafana_service_status.rc == 0
             fail_msg: "Grafana service is down."
             success_msg: "Grafana service is up."
-
-      rescue:
-        - name: Handle errors
-          fail:
-            msg: "Error occurred while checking or starting services."
