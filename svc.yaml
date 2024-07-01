@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   vars:
-    manual_trigger: "{{ params.manual_trigger | default(false) }}"
+    manual_trigger: "{{ manual_trigger | default(false) }}"  # Default to false if not set
   tasks:
     - name: Check if MySQL is running
       ansible.builtin.shell: "ps aux | grep mysql | grep -v grep"
@@ -11,14 +11,18 @@
       ignore_errors: true
 
     - name: Start MySQL service if not running and job is not triggered manually
-      ansible.builtin.shell: "nohup /home/knoldus/my.sh"
-      when: manual_trigger == false
+      ansible.builtin.shell: "nohup /home/knoldus/my.sh &"
+      when: 
+        - mysql_status.rc != 0
+        - manual_trigger | bool == false
 
     - name: Force restart MySQL if job is triggered manually
       block:
         - name: Stop MySQL if running
-          ansible.builtin.shell: "pgrep mysqld && nohup /home/knoldus/my_stop.sh"
+          ansible.builtin.shell: "pgrep mysqld && nohup /home/knoldus/my_stop.sh &"
           ignore_errors: true
         - name: Start MySQL
-          ansible.builtin.shell: "nohup /home/knoldus/my.sh"
-      when: manual_trigger == true
+          ansible.builtin.shell: "nohup /home/knoldus/my.sh &"
+      when: 
+        - mysql_status.rc != 0
+        - manual_trigger | bool == true
