@@ -3,40 +3,43 @@
   hosts: all
   become: yes
   tasks:
-    - name: Check and start services
-      block:
-        - name: Check if restart job is triggered automatically or manually
-          ansible.builtin.command: "curl -s -u your_username:your_api_token http://localhost:8080/job/manual_auto_job_testing/job/test/lastBuild/api/json"
-          register: jenkins_job_info
-        
-        - name: Debug Jenkins job info
-          ansible.builtin.debug:
-            var: jenkins_job_info.stdout
+    - name: Check if restart job is triggered automatically or manually
+      ansible.builtin.command: "curl -s -u your_username:your_api_token http://localhost:8080/job/manual_auto_job_testing/job/test/lastBuild/api/json"
+      register: jenkins_job_info
 
-        - name: Set fact if job is triggered automatically
-          ansible.builtin.set_fact:
-            triggered_automatically: "{{ 'Started by timer' in (jenkins_job_info.stdout | from_json | selectattr('actions', 'defined') | map(attribute='triggerCauses') | sum([]) | map(attribute='shortDescription') | list) }}"
-        
-        - name: Check if MySQL is running
-          ansible.builtin.shell: "ps aux | grep mysql | grep -v grep"
-          register: mysql_status
-          ignore_errors: true
-        
-        - name: Start MySQL service if not running
-          ansible.builtin.shell: "nohup /home/knoldus/my.sh"
-          when: mysql_status.rc != 0
-        
-        - name: Check if grafana is running
-          ansible.builtin.shell: "ps aux | grep grafana | grep -v grep"
-          register: gr_status
-          ignore_errors: true
-        
-        - name: Start grafana service if not running and job is triggered automatically
-          ansible.builtin.shell: "nohup /home/knoldus/gr.sh"
-          when:
-            - triggered_automatically
-            - gr_status.rc != 0
-        
-        - name: Force restart Zookeeper if job is triggered manually
-          ansible.builtin.shell: "nohup /home/knoldus/gr.sh restart"
-          when: not triggered_automatically
+    - name: Debug Jenkins job info
+      ansible.builtin.debug:
+        var: jenkins_job_info.stdout
+
+    - name: Fail if Jenkins API response is unauthorized
+      ansible.builtin.fail:
+        msg: "Unauthorized access to Jenkins API. Please check your credentials."
+      when: "'401 Unauthorized' in jenkins_job_info.stdout"
+
+    - name: Set fact if job is triggered automatically
+      ansible.builtin.set_fact:
+        triggered_automatically: "{{ 'Started by timer' in (jenkins_job_info.stdout | from_json | selectattr('actions', 'defined') | map(attribute='triggerCauses') | sum([]) | map(attribute='shortDescription') | list) }}"
+
+    - name: Check if MySQL is running
+      ansible.builtin.shell: "ps aux | grep mysql | grep -v grep"
+      register: mysql_status
+      ignore_errors: true
+
+    - name: Start MySQL service if not running
+      ansible.builtin.shell: "nohup /home/knoldus/my.sh"
+      when: mysql_status.rc != 0
+
+    - name: Check if grafana is running
+      ansible.builtin.shell: "ps aux | grep grafana | grep -v grep"
+      register: gr_status
+      ignore_errors: true
+
+    - name: Start grafana service if not running and job is triggered automatically
+      ansible.builtin.shell: "nohup /home/knoldus/gr.sh"
+      when:
+        - triggered_automatically
+        - gr_status.rc != 0
+
+    - name: Force restart Zookeeper if job is triggered manually
+      ansible.builtin.shell: "nohup /home/knoldus/gr.sh restart"
+      when: not triggered_automatically
