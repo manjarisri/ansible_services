@@ -10,7 +10,7 @@ pipeline {
             }
         }
         stage('Ansible Health Check') {
-            script {
+            steps {
                     def manualTrigger = params.MANUAL_TRIGGER ? 'true' : 'false'
                     sh """
                         ansible-playbook -i inven.ini svc.yaml -e "manual_trigger=${manualTrigger}"
