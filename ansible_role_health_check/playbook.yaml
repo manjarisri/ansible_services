@@ -1,5 +1,0 @@
----
-- hosts: localhost
-  gather_facts: no 
-  roles:
-   - ../ansible_role_health_check
