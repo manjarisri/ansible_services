@@ -6,16 +6,16 @@
     - name: Check and start services
       block:
         - name: Check if restart job is triggered automatically or manually
-          ansible.builtin.command: "curl -s http://localhost:8080/job/manual_auto_job_testing/job/test/lastBuild/api/json"
+          ansible.builtin.command: "curl -s -u your_username:your_api_token http://localhost:8080/job/manual_auto_job_testing/job/test/lastBuild/api/json"
           register: jenkins_job_info
-
+        
         - name: Debug Jenkins job info
           ansible.builtin.debug:
-            var: jenkins_job_info
+            var: jenkins_job_info.stdout
 
         - name: Set fact if job is triggered automatically
           ansible.builtin.set_fact:
-            triggered_automatically: "{{ 'Started by timer' in (jenkins_job_info.stdout | from_json | selectattr('actions', 'defined') | map(attribute='actions') | sum([]) | map(attribute='triggerCauses') | sum([]) | map(attribute='shortDescription') | list) }}"
+            triggered_automatically: "{{ 'Started by timer' in (jenkins_job_info.stdout | from_json | selectattr('actions', 'defined') | map(attribute='triggerCauses') | sum([]) | map(attribute='shortDescription') | list) }}"
         
         - name: Check if MySQL is running
           ansible.builtin.shell: "ps aux | grep mysql | grep -v grep"
