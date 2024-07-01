@@ -14,12 +14,6 @@ pipeline {
                 // Execute Ansible playbook
                 sh 'ansible-playbook svc.yaml -i inven.ini'
             }
-            post {
-                failure {
-                    // Trigger the 'restart' job if the Ansible playbook stage fails
-                    build job: "restart", wait: false
-                }
-            }
         }
     }
 }
