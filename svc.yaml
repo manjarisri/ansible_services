@@ -10,25 +10,21 @@
       register: mysql_status
       ignore_errors: true
 
-    - name: Start MySQL service if not running
-      ansible.builtin.shell: "nohup /home/knoldus/my.sh"
-      when: mysql_status.rc != 0
-
-    - name: Check if Zookeeper is running
-      ansible.builtin.shell: "ps aux | grep zookeeper | grep -v grep"
-      register: zk_status
+    - name: Check if gr is running
+      ansible.builtin.shell: "ps aux | grep grafana | grep -v grep"
+      register: gr_status
       ignore_errors: true
 
-    - name: Start Zookeeper service if not running and job is not triggered manually
-      ansible.builtin.shell: "nohup /home/knoldus/zk.sh"
+    - name: Start mysql service if not running and job is not triggered manually
+      ansible.builtin.shell: "nohup /home/knoldus/my.sh"
       when:
-        - zk_status.rc != 0
+        - my_status.rc != 0
         - not manual_trigger
 
-    - name: Force restart Zookeeper if job is triggered manually
+    - name: Force restart mysql if job is triggered manually
       block:
-        - name: Stop Zookeeper
-          ansible.builtin.shell: "systemctl stop zookeeper"
-        - name: Start Zookeeper
-          ansible.builtin.shell: "systemctl start zookeeper"
+        - name: Stop mysql
+          ansible.builtin.shell: "nohup /home/knoldus/my_stop.sh"
+        - name: Start mysql
+          ansible.builtin.shell: "nohup /home/knoldus/my.sh"
       when: manual_trigger
