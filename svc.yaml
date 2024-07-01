@@ -14,7 +14,7 @@
       ansible.builtin.shell: "nohup /home/knoldus/my.sh"
       when:
         - mysql_status.rc != 0
-        - not manual_trigger
+        - manual_trigger == false
 
     - name: Force restart MySQL if job is triggered manually
       block:
@@ -23,4 +23,4 @@
           ignore_errors: true
         - name: Start MySQL
           ansible.builtin.shell: "nohup /home/knoldus/my.sh"
-      when: manual_trigger
+      when: manual_trigger ==true
