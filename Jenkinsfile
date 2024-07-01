@@ -19,8 +19,8 @@ pipeline {
                         dir("${env.WORKSPACE}/ansible_role_health_check") {
                             ansiblePlaybook(
                                 installation: "ansible",
-                                playbook: "playbook.yaml",
-                                inventory: "hosts/inven",
+                                playbook: "./playbook.yaml",
+                                inventory: "./hosts/inven",
                                 extras: "-vvv"
                             )
                         }
