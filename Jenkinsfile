@@ -8,24 +8,18 @@ pipeline {
         }
         stage('Ansible Health Check') {
             steps {
-                script {
-                    sh """
-                      echo "Checking workspace contents:"
-                      ls -l
-                    """
-                    stage('ansible script') {
-                      steps{
-            	    	sh 'ansible-playbook svc.yaml -i inven.ini'	  
-                      } 
-                }
+                echo "Checking workspace contents:"
+                sh "ls -l"
+
+                // Execute Ansible playbook
+                sh 'ansible-playbook svc.yaml -i inven.ini'
             }
             post {
                 failure {
-                    // Trigger the second job if the ansible script stage fails
+                    // Trigger the 'restart' job if the Ansible playbook stage fails
                     build job: "restart", wait: false
                 }
             }
         }
     }
-}
 }
