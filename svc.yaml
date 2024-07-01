@@ -27,14 +27,6 @@
             fail_msg: "Grafana service is down."
             success_msg: "Grafana service is up."
 
-        - name: Start MySQL service if not running
-          ansible.builtin.shell: "nohup /home/knoldus/my.sh"
-          when: mysql_service_status.rc != 0
-
-        - name: Start Grafana service if not running
-          ansible.builtin.shell: "nohup /home/knoldus/gr.sh"
-          when: grafana_service_status.rc != 0
-
       rescue:
         - name: Handle errors
           fail:
