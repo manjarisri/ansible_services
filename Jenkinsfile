@@ -21,6 +21,7 @@ pipeline {
 		         playbook: "./playbook.yaml",
                          inventory: "./hosts/inven",
 			 extras: "-vvv"
+		       )
 		     }
                     }
                 }
