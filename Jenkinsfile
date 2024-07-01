@@ -21,7 +21,8 @@ pipeline {
                                 installation: "ansible",
                                 playbook: "./playbook.yaml",
                                 inventory: "./hosts/inven",
-                                extras: "-vvv"
+                                extras: "-vvv",
+                                disableHostKeyChecking: true
                             )
                         }
                     }
