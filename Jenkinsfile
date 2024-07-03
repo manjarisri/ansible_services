@@ -17,7 +17,10 @@ pipeline {
             post {
                 failure {
                     // Trigger the 'restart' job if the Ansible playbook stage fails
-                    build job: "test", wait: false
+                    // build job: "test", wait: false
+                    build job: 'test', parameters: [
+                            booleanParam(name: 'MANUAL_TRIGGER', value: false)
+                        ]
                 }
             }
         }
