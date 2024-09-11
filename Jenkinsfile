@@ -4,7 +4,7 @@ pipeline {
         choice(name: 'ENVIRONMENT', choices: ['dev1', 'dev2', 'test1', 'test2'], description: 'Choose the environment')
     }
     environment{
-     envName = "${params.ENVIRONMENT}"
+     envName = "${pipelineParams.ENVIRONMENT}"
      
 }
     stages {
