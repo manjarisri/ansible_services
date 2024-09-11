@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    parameters {
+        choice(name: 'ENVIRONMENT', choices: ['dev1', 'dev2', 'test1', 'test2'], description: 'Choose the environment')
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -8,11 +11,16 @@ pipeline {
         }
         stage('Ansible Health Check') {
             steps {
-                echo "Checking workspace contents:"
-                sh "ls -l"
-
-                // Execute Ansible playbook
-                sh 'ansible-playbook svc.yaml -i inven.ini'
+                script {
+                    // Define topology file based on environment
+                    def topologyFile = ''
+                    if (params.ENVIRONMENT.startsWith('dev')) {
+                        topologyFile = 'dev_topology.yaml'
+                    } else if (params.ENVIRONMENT.startsWith('test')) {
+                        topologyFile = 'topology.yaml'
+                    }
+                    // Print the selected file to the console
+                    echo "Using ${topologyFile} for environment ${params.ENVIRONMENT}"
             }
             post {
                 failure {
