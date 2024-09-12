@@ -4,7 +4,7 @@ pipeline {
         choice(name: 'ENVIRONMENT', choices: ['dev1', 'dev2', 'test1', 'test2'], description: 'Choose the environment')
     }
     environment{
-     envName = "${pipelineParams.ENVIRONMENT}"
+     envName = "${params.ENVIRONMENT}"
      
 }
     stages {
@@ -18,9 +18,9 @@ pipeline {
                 script {
                     // Define topology file based on environment
                     def topologyFile = ''
-                    if (envName.startsWith('dev')) {
+                    if (env.envName.startsWith('dev')) {
                         topologyFile = 'dev_topology.yaml'
-                    } else if (envName.startsWith('test')) {
+                    } else if (env.envName.startsWith('test')) {
                         topologyFile = 'topology.yaml'
                     }
                     // Print the selected file to the console
