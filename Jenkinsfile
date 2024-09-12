@@ -18,9 +18,9 @@ pipeline {
                 script {
                     // Define topology file based on environment
                     def topologyFile = ''
-                    if (${envName}.startsWith('dev')) {
+                    if (env.envName.startsWith('dev')) {
                         topologyFile = 'dev_topology.yaml'
-                    } else if (${envName}startsWith('test')) {
+                    } else if (env.envName.startsWith('test')) {
                         topologyFile = 'topology.yaml'
                     }
                     // Print the selected file to the console
