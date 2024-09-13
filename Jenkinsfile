@@ -26,7 +26,7 @@ pipeline {
                     // Print the selected file to the console
                     echo "Using ${topologyFile} for environment ${envName}"
             }
-            post {
+    post {
                 failure {
                     // Trigger the 'restart' job if the Ansible playbook stage fails
                     // build job: "test", wait: false
